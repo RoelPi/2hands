@@ -1,10 +1,4 @@
-library(data.table)
-library(ggplot2)
-library(lubridate)
-library(magrittr)
-library(stringr)
-library(missForest)
-library(dummies)
+source('0_resources.R')
 
 rm(list=ls())
 offers <- fread('offers.csv', encoding='UTF-8')
@@ -159,6 +153,8 @@ rm(km_range)
 # Fix transmission
 cars[,transmission := gsub('Manueel','manual',transmission)]
 cars[,transmission := gsub('Automatisch','automatic',transmission)]
+cars[,transmission := gsub('Halfautomaat','automatic',transmission)]
+cars[transmission == 'LPG']$transmission <- NA
 
 # Fix power
 cars <- cars[grepl(' PK',power) | is.na(power)] # FILTER
