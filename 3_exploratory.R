@@ -1,4 +1,6 @@
 rm(list=ls())
+source('0_resources.R')
+
 dt <- fread('dtimp.csv')
 options(scipen=999)
 
@@ -42,13 +44,13 @@ rm(z, g2)
 z <- dt[car_condition == 'used']
 g3 <- ggplot(z,aes(x=car_kilometers,y=offer_price)) + 
   geom_point(col=pal[3],alpha=0.2) +
-  ylim(0,50000) +
+  ylim(0,50000) + xlim(0,400000) +
   xlab('kilometers traversed') + ylab('price') +
-  ggtitle('Relationship between traversed kilometers & price (1)') +
+  ggtitle('Relationship between traversed kilometers & price') +
   t
 ggsave('3.png',g3,width=48.8,height=27.4, units='cm')
 g3
-rm(z, g3)
+rm(z)
 
 # What is the relationship between kilometers & price? (level-log)
 z <- dt[car_condition == 'used']
@@ -61,7 +63,7 @@ g4 <- ggplot(z,aes(x=log(car_kilometers),y=offer_price)) +
   t
 ggsave('4.png',g4,width=48.8,height=27.4, units='cm')
 g4
-rm(z, g4)
+rm(z)
 
 # What is the relationship between age & price?
 z <- dt[car_condition == 'used']
@@ -73,7 +75,7 @@ g5 <- ggplot(z,aes(x=car_age,y=offer_price)) +
   t
 ggsave('5.png',g5,width=48.8,height=27.4, units='cm')
 g5
-rm(z, g5)
+rm(z)
 
 # Is the relationship between age and kilometers strong? (alluding non-independence of variables)
 z <- dt[car_condition == 'used'] # Filter for more linearity
@@ -81,10 +83,16 @@ g6 <- ggplot(z,aes(x=car_age,y=car_kilometers)) +
   geom_jitter(col=pal[3],alpha=0.2) +
   ylim(0,300000) +
   xlab('car age') + ylab('kilometers traversed') +
-  ggtitle('Relationship between car age & kilometers traversed')
+  ggtitle('Relationship between car age & kilometers traversed') +
   t
 ggsave('6.png',g6,width=48.8,height=27.4, units='cm')
-g6
+
+
+grid.arrange(g3, g5, g6, nrow = 1)
+
+rm(g3, g4, g5, g6, z)
+
+
 
 lm1 <- with(z,lm(car_kilometers ~ car_age))
 summary(lm1)

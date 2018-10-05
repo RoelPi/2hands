@@ -83,7 +83,6 @@ g11 <- ggplot(test,aes(x=y_pred,y=y_test)) +
   t
 ggsave('11.png',g11,width=48.8,height=27.4, units='cm')
 g11
-rm(g11)
 
 g12 <- ggplot(test[y_test >= 4000 & y_test <= 8000],aes(x=y_pred,y=y_test)) + 
   geom_point(col=pal[3]) +
@@ -96,6 +95,8 @@ g12 <- ggplot(test[y_test >= 4000 & y_test <= 8000],aes(x=y_pred,y=y_test)) +
   t
 ggsave('12.png',g12,width=48.8,height=27.4, units='cm')
 g12
-rm(g12)
+grid.arrange(g11, g12, nrow = 1)
+rm(g11, g12)
 
+varImpPlot(model)
 voor_maaike <- test[y_test >= 4000 & y_test <= 8000]
